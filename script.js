@@ -14,9 +14,12 @@ fetch('charMap.json')
             const numRows = Math.ceil(window.innerHeight / 22); // 20px dot + 2px gap
             const numCols = Math.ceil(window.innerWidth / 22); // 20px dot + 2px gap
 
+            // Ensure the number of columns is a multiple of 6
+            const adjustedNumCols = Math.floor(numCols / 6) * 6;
+
             // Create a grid of dots
             for (let i = 0; i < numRows; i++) {
-                for (let j = 0; j < numCols; j++) {
+                for (let j = 0; j < adjustedNumCols; j++) {
                     const dotElement = document.createElement('div');
                     dotElement.className = 'dot';
                     display.appendChild(dotElement);
@@ -30,7 +33,7 @@ fetch('charMap.json')
                 if (charMap[char]) {
                     for (let row of charMap[char]) {
                         for (let dot of row) {
-                            const dotIndex = rowIndex * numCols + colIndex;
+                            const dotIndex = rowIndex * adjustedNumCols + colIndex;
                             const dotElement = display.children[dotIndex];
                             if (dot) {
                                 dotElement.classList.add('on');
@@ -45,6 +48,9 @@ fetch('charMap.json')
                     colIndex += cols + gap; // Move to the next character position
                     rowIndex -= rows; // Reset to the first row for the next character
                 }
+                // Add a blank line between characters
+                rowIndex += rows + 1;
+                colIndex = 0;
             }
         });
     })
